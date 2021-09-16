@@ -174,7 +174,7 @@ class FormScreenState extends State<FormScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 new IconButton(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.group_add_rounded),
                   onPressed: () {
                     Navigator.push(
                       context,

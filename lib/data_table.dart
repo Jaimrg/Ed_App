@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'model/Info_Aluno.dart';
 import 'model/Aluno.dart';
+import 'form_screen.dart';
 
 class Datatable extends StatefulWidget {
   @override
@@ -17,11 +18,87 @@ class DataTableState extends State<Datatable> {
   bool isAscending = true;
   int sortType = sortName;
 
+  final topBar = new AppBar(
+    backgroundColor: Colors.white,
+    // centerTitle: true,
+    elevation: 0.0,
+    leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
+    /*title: new Padding(
+      //height: 35.0,
+      padding: const EdgeInsets.only(left: 175.0),
+      child: new Text("CADASTRAR"),
+      
+    ),*/
+    actions: <Widget>[
+      Padding(
+          padding: const EdgeInsets.only(right: 12.0, top: 19.0),
+          child: new Text(
+            "Lista",
+            style: TextStyle(
+                color: Colors.blue,
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                fontFamily: 'AkayaTelivigala'),
+          ))
+    ],
+  );
+
+  @override
+  void initState() {
+    aluno.initData(2);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _getBodyWidget(),
-    );
+        appBar: topBar,
+        body: _getBodyWidget(),
+        bottomNavigationBar: new Container(
+          color: Colors.white,
+          height: 50.0,
+          alignment: Alignment.center,
+          child: new BottomAppBar(
+            child: new Row(
+              // alignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                new IconButton(
+                  icon: Icon(Icons.group_add_rounded),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => new FormScreen()),
+                    );
+                  },
+                ),
+                new IconButton(
+                  icon: Icon(
+                    Icons.question_answer,
+                  ),
+                  onPressed: null,
+                ),
+                new IconButton(
+                  icon: Icon(
+                    Icons.book,
+                  ),
+                  onPressed: null,
+                ),
+                new IconButton(
+                  icon: Icon(
+                    Icons.account_circle_rounded,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => new Datatable()),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   //Esse eh o corpo da tabela
@@ -29,7 +106,7 @@ class DataTableState extends State<Datatable> {
     return Container(
       child: HorizontalDataTable(
         leftHandSideColumnWidth: 100,
-        rightHandSideColumnWidth: 600,
+        rightHandSideColumnWidth: 1200,
         isFixedHeader: true,
         headerWidgets: _getTitleWidget(),
         leftSideItemBuilder: _generateFirstColumnRow,
@@ -136,8 +213,8 @@ class DataTableState extends State<Datatable> {
             children: <Widget>[
               Icon(
                   aluno.infoaluno[index].estado
-                      ? Icons.notifications_off
-                      : Icons.notifications_active,
+                      ? Icons.error_outlined
+                      : Icons.done_outlined,
                   color: aluno.infoaluno[index].estado
                       ? Colors.red
                       : Colors.green),
