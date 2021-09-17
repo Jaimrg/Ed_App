@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'data_table.dart';
+import 'model/Info_Aluno.dart';
+import 'model/Aluno.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -19,6 +21,9 @@ class FormScreenState extends State<FormScreen> {
     'Médio',
     'Superior'
   ];
+
+  TextEditingController nome = new TextEditingController();
+  String name = "";
   //late String value;
 
   final topBar = new AppBar(
@@ -52,6 +57,10 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Nome'),
       maxLength: 20,
+      controller: nome,
+      onChanged: (String value) {
+        print(value);
+      },
     );
   }
 
@@ -151,7 +160,29 @@ class FormScreenState extends State<FormScreen> {
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(30.0),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                List<Info_Aluno> infoaluno = [];
+
+                                /*void initData(int size) {
+                                  for (int i = 0; i < size; i++) {
+                                    infoaluno.add(Info_Aluno(
+                                        "Jaime",
+                                        i % 2 == 0,
+                                        "10",
+                                        "Ndlavela",
+                                        "8483883828",
+                                        "8737363535",
+                                        "10/09/2021",
+                                        1500));
+                                  }
+                                }*/
+
+                                AlertDialog(
+                                  // Retrieve the text the user has entered by using the
+                                  // TextEditingController.
+                                  content: Text(nome.text),
+                                );
+                              },
                               color: Colors.blue[300],
                               child: Text(
                                 "Cadastrar",
