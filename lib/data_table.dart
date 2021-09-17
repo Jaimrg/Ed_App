@@ -43,11 +43,11 @@ class DataTableState extends State<Datatable> {
     ],
   );
 
-  @override
+  /*@override
   void initState() {
     aluno.initData(2);
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

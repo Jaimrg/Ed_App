@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'data_table.dart';
 import 'model/Info_Aluno.dart';
 import 'model/Aluno.dart';
+import 'widget/button_widget.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -14,16 +15,23 @@ class FormScreenState extends State<FormScreen> {
   //Variaveis
   late String _classe;
   List _classes = [
-    '1ª a 7ª',
-    '8ª a 10ª',
-    '11ª e 12ª',
-    'Preparação',
-    'Médio',
-    'Superior'
+    '1ª a 7ª Classes',
+    '8ª a 10ª Classes',
+    '11ª e 12ª Classes',
+    'Preparação Para Exames',
+    'Ensino Médio',
+    'Ensino Superior'
   ];
 
   TextEditingController nome = new TextEditingController();
   String name = "";
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String nome_f = '';
+  String bairro = '';
+  String contacto = '';
+  String contacto_enc = '';
+  String classe = '';
   //late String value;
 
   final topBar = new AppBar(
@@ -31,12 +39,6 @@ class FormScreenState extends State<FormScreen> {
     // centerTitle: true,
     elevation: 0.0,
     leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
-    /*title: new Padding(
-      //height: 35.0,
-      padding: const EdgeInsets.only(left: 175.0),
-      child: new Text("CADASTRAR"),
-      
-    ),*/
     actions: <Widget>[
       Padding(
           padding: const EdgeInsets.only(right: 12.0, top: 19.0),
@@ -51,16 +53,19 @@ class FormScreenState extends State<FormScreen> {
     ],
   );
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   Widget _buildName() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Nome'),
       maxLength: 20,
       controller: nome,
-      onChanged: (String value) {
-        print(value);
+      validator: (value) {
+        if (value!.length < 4) {
+          return 'Enter at least 4 characters';
+        } else {
+          return null;
+        }
       },
+      onSaved: (value) => setState(() => nome_f = value.toString()),
     );
   }
 
@@ -68,6 +73,14 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Bairro'),
       maxLength: 20,
+      validator: (value) {
+        if (value!.length < 4) {
+          return 'Enter at least 4 characters';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => bairro = value.toString()),
     );
   }
 
@@ -75,6 +88,14 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Contacto'),
       maxLength: 10,
+      validator: (value) {
+        if (value!.length < 4) {
+          return 'Enter at least 4 characters';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => contacto = value.toString()),
     );
   }
 
@@ -82,10 +103,44 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Contacto Do Encarregado'),
       maxLength: 10,
+      validator: (value) {
+        if (value!.length < 4) {
+          return 'Enter at least 4 characters';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => contacto_enc = value.toString()),
     );
   }
 
-  Widget? _buildClasse() {}
+  Widget buildSubmit() => Builder(
+        builder: (context) => ButtonWidget(
+          text: 'Submit',
+          onClicked: () {
+            final isValid = _formKey.currentState!.validate();
+            // FocusScope.of(context).unfocus();
+
+            if (isValid) {
+              _formKey.currentState!.save();
+
+              final message =
+                  'Nome: $nome_f\nBairro: $bairro\nContacto: $contacto';
+              final snackBar = SnackBar(
+                content: Text(
+                  message,
+                  style: TextStyle(fontSize: 20),
+                ),
+                backgroundColor: Colors.green,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              Aluno al = new Aluno();
+              al.initData(0, nome_f, bairro, contacto, contacto_enc);
+            }
+          },
+        ),
+      );
 
   var selectedCurrency, selectedType;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
@@ -151,11 +206,13 @@ class FormScreenState extends State<FormScreen> {
                                 setState(() => _currentSugars = val),
                           ),
                           SizedBox(height: 30),
-                          Container(
+                          buildSubmit(),
+                          /*Container(
                             color: Colors.transparent,
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                             padding: EdgeInsets.only(right: 16.0, left: 16.0),
+                            
                             child: FlatButton(
                               shape: new RoundedRectangleBorder(
                                 borderRadius: new BorderRadius.circular(30.0),
@@ -193,7 +250,7 @@ class FormScreenState extends State<FormScreen> {
                                 ),
                               ),
                             ),
-                          )
+                          )*/
                         ])))),
         bottomNavigationBar: new Container(
           color: Colors.white,
