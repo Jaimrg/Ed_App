@@ -274,3 +274,9 @@ class DataTableState extends State<Datatable> {
 
   Aluno aluno = new Aluno();
 }
+
+class n {
+  List<Info_Aluno> infoalunoL(List<Info_Aluno> infoaluno) {
+    return infoaluno;
+  }
+}

@@ -59,8 +59,8 @@ class FormScreenState extends State<FormScreen> {
       maxLength: 20,
       controller: nome,
       validator: (value) {
-        if (value!.length < 4) {
-          return 'Enter at least 4 characters';
+        if (value!.length < 2) {
+          return 'Digite Pelomenos 2 Caracteres';
         } else {
           return null;
         }
@@ -74,8 +74,8 @@ class FormScreenState extends State<FormScreen> {
       decoration: InputDecoration(labelText: 'Bairro'),
       maxLength: 20,
       validator: (value) {
-        if (value!.length < 4) {
-          return 'Enter at least 4 characters';
+        if (value!.length < 2) {
+          return 'Digite Pelomenos 2 Caracteres';
         } else {
           return null;
         }
@@ -89,8 +89,8 @@ class FormScreenState extends State<FormScreen> {
       decoration: InputDecoration(labelText: 'Contacto'),
       maxLength: 10,
       validator: (value) {
-        if (value!.length < 4) {
-          return 'Enter at least 4 characters';
+        if (value!.length < 9) {
+          return 'Digite Pelo menos 9 Digitos';
         } else {
           return null;
         }
@@ -104,8 +104,8 @@ class FormScreenState extends State<FormScreen> {
       decoration: InputDecoration(labelText: 'Contacto Do Encarregado'),
       maxLength: 10,
       validator: (value) {
-        if (value!.length < 4) {
-          return 'Enter at least 4 characters';
+        if (value!.length < 9) {
+          return 'Digite Pelo menos 9 Digitos';
         } else {
           return null;
         }
@@ -116,7 +116,7 @@ class FormScreenState extends State<FormScreen> {
 
   Widget buildSubmit() => Builder(
         builder: (context) => ButtonWidget(
-          text: 'Submit',
+          text: 'Cadastrar',
           onClicked: () {
             final isValid = _formKey.currentState!.validate();
             // FocusScope.of(context).unfocus();
@@ -124,8 +124,7 @@ class FormScreenState extends State<FormScreen> {
             if (isValid) {
               _formKey.currentState!.save();
 
-              final message =
-                  'Nome: $nome_f\nBairro: $bairro\nContacto: $contacto';
+              final message = 'Cadastrado Com Sucesso';
               final snackBar = SnackBar(
                 content: Text(
                   message,
@@ -206,7 +205,13 @@ class FormScreenState extends State<FormScreen> {
                                 setState(() => _currentSugars = val),
                           ),
                           SizedBox(height: 30),
-                          buildSubmit(),
+                          Container(
+                            color: Colors.transparent,
+                            width: MediaQuery.of(context).size.width,
+                            height: 50,
+                            padding: EdgeInsets.only(right: 16.0, left: 16.0),
+                            child: buildSubmit(),
+                          )
                           /*Container(
                             color: Colors.transparent,
                             width: MediaQuery.of(context).size.width,

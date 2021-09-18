@@ -1,5 +1,10 @@
 //Importacoes
+import 'package:ed_app/data_table.dart';
+
+import '../data_table.dart';
+import '../data_table.dart';
 import 'Info_Aluno.dart';
+import 'package:ed_app/data_table.dart';
 
 class Aluno {
   List<Info_Aluno> infoaluno = [];
