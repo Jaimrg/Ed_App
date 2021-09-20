@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   horizontal_data_table: ^3.4.3
+  google_fonts: ^2.1.0
   flutter:
     sdk: flutter
 

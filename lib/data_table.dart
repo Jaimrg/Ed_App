@@ -22,7 +22,7 @@ class DataTableState extends State<Datatable> {
     backgroundColor: Colors.white,
     // centerTitle: true,
     elevation: 0.0,
-    leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
+    //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
     /*title: new Padding(
       //height: 35.0,
       padding: const EdgeInsets.only(left: 175.0),
@@ -63,8 +63,12 @@ class DataTableState extends State<Datatable> {
               // alignment: MainAxisAlignment.spaceAround,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new IconButton(
-                  icon: Icon(Icons.group_add_rounded),
+                new TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
+                  ),
+                  icon: Icon(Icons.group_add_rounded, color: Colors.black),
+                  label: Text('Adicionar Aluno'),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -72,7 +76,7 @@ class DataTableState extends State<Datatable> {
                     );
                   },
                 ),
-                new IconButton(
+                /* new IconButton(
                   icon: Icon(
                     Icons.question_answer,
                   ),
@@ -83,11 +87,12 @@ class DataTableState extends State<Datatable> {
                     Icons.book,
                   ),
                   onPressed: null,
-                ),
-                new IconButton(
+                ),*/
+                new TextButton.icon(
                   icon: Icon(
-                    Icons.account_circle_rounded,
+                    Icons.article_outlined,
                   ),
+                  label: Text('Visualizar Alunos'),
                   onPressed: () {
                     Navigator.push(
                       context,

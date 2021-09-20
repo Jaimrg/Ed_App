@@ -38,7 +38,7 @@ class FormScreenState extends State<FormScreen> {
     backgroundColor: Colors.white,
     // centerTitle: true,
     elevation: 0.0,
-    leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
+    //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
     actions: <Widget>[
       Padding(
           padding: const EdgeInsets.only(right: 12.0, top: 19.0),
@@ -143,21 +143,16 @@ class FormScreenState extends State<FormScreen> {
 
   var selectedCurrency, selectedType;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
-  List<String> _accountType = <String>[
-    'Savings',
-    'Deposit',
-    'Checking',
-    'Brokerage'
-  ];
+
   final sugars = [
-    '1ª a 7ª',
-    '8ª a 10ª',
-    '11ª e 12ª',
-    'Preparação',
-    'Médio',
-    'Superior'
+    '1ª a 7ª Classes',
+    '8ª a 10ª Classes',
+    '11ª e 12ª Classes',
+    'Preparação Para Exames',
+    'Ensino Médio',
+    'Ensino Superior'
   ];
-  String? _currentSugars = '1ª a 7ª';
+  String? _currentSugars = '1ª a 7ª Classes';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,8 +261,9 @@ class FormScreenState extends State<FormScreen> {
               // alignment: MainAxisAlignment.spaceAround,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                new IconButton(
+                new TextButton.icon(
                   icon: Icon(Icons.group_add_rounded),
+                  label: Text('Adicionar Aluno'),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -275,7 +271,7 @@ class FormScreenState extends State<FormScreen> {
                     );
                   },
                 ),
-                new IconButton(
+                /* new IconButton(
                   icon: Icon(
                     Icons.question_answer,
                   ),
@@ -286,11 +282,16 @@ class FormScreenState extends State<FormScreen> {
                     Icons.book,
                   ),
                   onPressed: null,
-                ),
-                new IconButton(
-                  icon: Icon(
-                    Icons.account_circle_rounded,
+                ),*/
+                new TextButton.icon(
+                  style: TextButton.styleFrom(
+                    primary: Colors.black,
                   ),
+                  icon: Icon(
+                    Icons.article_outlined,
+                    color: Colors.black,
+                  ),
+                  label: Text('Visualizar Alunos'),
                   onPressed: () {
                     Navigator.push(
                       context,
