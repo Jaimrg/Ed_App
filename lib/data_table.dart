@@ -3,6 +3,7 @@ import 'package:horizontal_data_table/horizontal_data_table.dart';
 import 'model/Info_Aluno.dart';
 import 'model/Aluno.dart';
 import 'form_screen.dart';
+import 'boxes.dart';
 
 class Datatable extends StatefulWidget {
   @override

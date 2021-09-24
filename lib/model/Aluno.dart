@@ -11,9 +11,9 @@ class Aluno {
 
   void initData(int size, String nome, String bairro, String contacto,
       String contacto_enc) {
-    //for (int i = 0; i < size; i++) {
+    /*for (int i = 0; i < size; i++) {
     infoaluno.add(Info_Aluno(nome, 2 % 2 == 0, "10", bairro, contacto,
-        contacto_enc, "10/09/2021", 1500));
+        contacto_enc, "10/09/2021", 1500));*/
     //}
   }
 

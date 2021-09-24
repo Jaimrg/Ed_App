@@ -1,8 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'data_table.dart';
 import 'model/Info_Aluno.dart';
 import 'model/Aluno.dart';
 import 'widget/button_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'boxes.dart';
+//
+import 'package:ed_app/model/Estudante.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'data_show.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -12,6 +22,15 @@ class FormScreen extends StatefulWidget {
 }
 
 class FormScreenState extends State<FormScreen> {
+  //Hive_Salvar Dados
+
+  @override
+  void dispose() {
+    Hive.close();
+
+    super.dispose();
+  }
+
   //Variaveis
   late String _classe;
   List _classes = [
@@ -24,6 +43,9 @@ class FormScreenState extends State<FormScreen> {
   ];
 
   TextEditingController nome = new TextEditingController();
+  TextEditingController bairroC = new TextEditingController();
+  TextEditingController telefone = new TextEditingController();
+  TextEditingController telefone_enc = new TextEditingController();
   String name = "";
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -35,7 +57,7 @@ class FormScreenState extends State<FormScreen> {
   //late String value;
 
   final topBar = new AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.blue,
     // centerTitle: true,
     elevation: 0.0,
     //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -45,10 +67,10 @@ class FormScreenState extends State<FormScreen> {
           child: new Text(
             "CADASTRAR",
             style: TextStyle(
-                color: Colors.blue,
+                color: Colors.white,
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
-                fontFamily: 'AkayaTelivigala'),
+                fontFamily: 'arial'),
           ))
     ],
   );
@@ -73,6 +95,7 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Bairro'),
       maxLength: 20,
+      controller: bairroC,
       validator: (value) {
         if (value!.length < 2) {
           return 'Digite Pelomenos 2 Caracteres';
@@ -88,6 +111,7 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Contacto'),
       maxLength: 10,
+      controller: telefone,
       validator: (value) {
         if (value!.length < 9) {
           return 'Digite Pelo menos 9 Digitos';
@@ -95,6 +119,7 @@ class FormScreenState extends State<FormScreen> {
           return null;
         }
       },
+      keyboardType: TextInputType.number,
       onSaved: (value) => setState(() => contacto = value.toString()),
     );
   }
@@ -103,6 +128,7 @@ class FormScreenState extends State<FormScreen> {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Contacto Do Encarregado'),
       maxLength: 10,
+      controller: telefone_enc,
       validator: (value) {
         if (value!.length < 9) {
           return 'Digite Pelo menos 9 Digitos';
@@ -110,6 +136,7 @@ class FormScreenState extends State<FormScreen> {
           return null;
         }
       },
+      keyboardType: TextInputType.number,
       onSaved: (value) => setState(() => contacto_enc = value.toString()),
     );
   }
@@ -136,10 +163,27 @@ class FormScreenState extends State<FormScreen> {
 
               Aluno al = new Aluno();
               al.initData(0, nome_f, bairro, contacto, contacto_enc);
+              clean();
+              addEstudante(nome_f, bairro, contacto, contacto_enc, classe);
             }
           },
         ),
       );
+
+  void clean() {
+    nome.clear();
+    bairroC.clear();
+    telefone.clear();
+    telefone_enc.clear();
+  }
+
+  void setDados(
+      String nomeD, String bairroD, String contactoD, String contacto_encD) {
+    nome.text = nomeD;
+    bairroC.text = bairroD;
+    telefone.text = contactoD;
+    telefone_enc.text = contacto_encD;
+  }
 
   var selectedCurrency, selectedType;
   final GlobalKey<FormState> _formKeyValue = new GlobalKey<FormState>();
@@ -293,9 +337,11 @@ class FormScreenState extends State<FormScreen> {
                   ),
                   label: Text('Visualizar Alunos'),
                   onPressed: () {
+                    Hive.openBox<Estudante>('Estudante');
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => new Datatable()),
+                      MaterialPageRoute(
+                          builder: (context) => new TransactionPage()),
                     );
                   },
                 ),
@@ -303,5 +349,26 @@ class FormScreenState extends State<FormScreen> {
             ),
           ),
         ));
+  }
+
+  Future addEstudante(String nome, String bairro, String telefone,
+      String telefone_enc, String classe) async {
+    final estudante = Estudante()
+      ..nome = nome
+      ..estado = true
+      ..classe = classe
+      ..bairro = bairro
+      ..telefone = telefone
+      ..telefone_enc = telefone_enc
+      ..data_pagamento = '10/09'
+      ..valor = 5000;
+    final box = Boxes.getTransactions();
+    box.add(estudante);
+    //box.put('mykey', transaction);
+
+    // final mybox = Boxes.getTransactions();
+    // final myTransaction = mybox.get('key');
+    // mybox.values;
+    // mybox.keys;
   }
 }
