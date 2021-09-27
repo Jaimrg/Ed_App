@@ -8,14 +8,15 @@ import 'widget/button_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'boxes.dart';
-import 'package:intl/intl.dart';
+
 //
 import 'package:ed_app/model/Estudante.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ed_app/widget/transaction_dialog.dart';
 import 'package:ed_app/widget/ver_mais.dart';
-import 'form_screen.dart';
+import 'widget/EditDialog.dart';
+import 'package:intl/intl.dart';
 
 class TransactionPage extends StatefulWidget {
   @override
@@ -30,11 +31,11 @@ class _TransactionPageState extends State<TransactionPage> {
     super.dispose();
   }*/
   final topBar = new AppBar(
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.white,
     // centerTitle: true,
     elevation: 0.0,
     iconTheme: IconThemeData(
-      color: Colors.white, //change your color here
+      color: Colors.blue, //change your color here
     ),
     //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
     actions: <Widget>[
@@ -43,7 +44,7 @@ class _TransactionPageState extends State<TransactionPage> {
           child: new Text(
             "Lista de Alunos",
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.blue,
               fontSize: 18,
               fontWeight: FontWeight.normal,
               fontFamily: 'arial',
@@ -51,6 +52,37 @@ class _TransactionPageState extends State<TransactionPage> {
           ))
     ],
   );
+
+  late String _classe;
+  List _classes = [
+    '1ª a 7ª Classes',
+    '8ª a 10ª Classes',
+    '11ª e 12ª Classes',
+    'Preparação Para Exames',
+    'Ensino Médio',
+    'Ensino Superior'
+  ];
+  final sugars = [
+    '1ª a 7ª Classes',
+    '8ª a 10ª Classes',
+    '11ª e 12ª Classes',
+    'Preparação Para Exames',
+    'Ensino Médio',
+    'Ensino Superior'
+  ];
+  String? _currentSugars = '1ª a 7ª Classes';
+  TextEditingController nome = new TextEditingController();
+  TextEditingController bairroC = new TextEditingController();
+  TextEditingController telefone = new TextEditingController();
+  TextEditingController telefone_enc = new TextEditingController();
+  String name = "";
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String nome_f = '';
+  String bairro = '';
+  String contacto = '';
+  String contacto_enc = '';
+  String classe = '';
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -174,33 +206,382 @@ class _TransactionPageState extends State<TransactionPage> {
             child: TextButton.icon(
               label: Text('Renovar'),
               icon: Icon(Icons.more_vert),
-              onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => VerMaisDialog(
-                    estudante: transaction,
-                    onClickedDone: (name, amount, isExpense) => print('edited'),
-                  ),
-                ),
-              ),
+              onPressed: () {
+                _RenovarDialog(context, transaction);
+              },
             ),
           ),
           Expanded(
             child: TextButton.icon(
-                label: Text('Editar'),
-                icon: Icon(Icons.edit),
-                onPressed: () {
-                  FormScreen fs = new FormScreen();
-                }),
+              label: Text('Editar'),
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                /*Navigator.push(
+                  contexta,
+                  new MaterialPageRoute(
+                    builder: (contexta) => EditDialog(
+                      estudante: transaction,
+                      contexto: context,
+                      onClickedDone:
+                          (nome, bairro, telefone, telefone_enc, contexta) =>
+                              editEstudante(transaction, nome, bairro, telefone,
+                                  telefone_enc, classe),
+                    ),
+                  ),
+                );*/
+                if (transaction != null) {
+                  nome.text = transaction.nome;
+                  bairroC.text = transaction.bairro;
+                  telefone.text = transaction.telefone;
+                  telefone_enc.text = transaction.telefone;
+                }
+                _EditarDialog(context, transaction);
+              },
+            ),
           ),
           Expanded(
             child: TextButton.icon(
               label: Text('Excluir'),
               icon: Icon(Icons.delete),
-              onPressed: () => deleteTransaction(transaction),
+              onPressed: () {
+                _deleteDialog(context, transaction);
+              },
             ),
           )
         ],
       );
+
+  _deleteDialog(BuildContext context, Estudante transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Confirmacao'),
+            content: Text(
+                'Tem Certeza que Pretende Excluir ' + transaction.nome + '?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  deleteEstudante(transaction);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Sim',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _RenovarDialog(BuildContext context, Estudante transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Confirmacao'),
+            content: Text(
+                'Confirmar a Renovacao do Pacote da ' + transaction.classe),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Nao',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Sim',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /*_EditarDialog(BuildContext context, Estudante transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Confirmacao'),
+            content: Form(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(height: 8),
+                    _buildName(),
+                    SizedBox(height: 8),
+                    _buildBairro(),
+                    SizedBox(height: 8),
+                    _buildTelefone(),
+                    SizedBox(height: 8),
+                    _buildTelefone_Enc(),
+                    SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: _currentSugars,
+                      // decoration: const textInputDecoration,
+                      items: sugars.map((sugar) {
+                        return DropdownMenuItem(
+                          value: sugar,
+                          child: Text(sugar),
+                        );
+                      }).toList(),
+                      onChanged: (val) => setState(() => _currentSugars = val),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  final isValid = _formKey.currentState!.validate();
+
+                  if (isValid) {
+                    _formKey.currentState!.save();
+
+                    // editEstudante(transaction, nome_f, bairro, contacto,
+                    //contacto_enc, classe);
+
+                  }
+                  print("Nome do puto " + nome_f);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Atualizar',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }*/
+
+  _EditarDialog(BuildContext context, Estudante transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Confirmacao'),
+            content: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(height: 8),
+                    _buildName(),
+                    SizedBox(height: 8),
+                    _buildBairro(),
+                    SizedBox(height: 8),
+                    _buildTelefone(),
+                    SizedBox(height: 8),
+                    _buildTelefone_Enc(),
+                    SizedBox(height: 8),
+                    DropdownButtonFormField<String>(
+                      value: _currentSugars,
+                      // decoration: const textInputDecoration,
+                      items: sugars.map((sugar) {
+                        return DropdownMenuItem(
+                          value: sugar,
+                          child: Text(sugar),
+                        );
+                      }).toList(),
+                      onChanged: (val) => setState(() => _currentSugars = val),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              buildAddButton(context, transaction),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildAddButton(BuildContext context, Estudante transaction) {
+    return TextButton(
+      child: Text('Atualizar'),
+      onPressed: () async {
+        final isValid = _formKey.currentState!.validate();
+
+        if (isValid) {
+          final nomeb = nome.text;
+          final bairro = bairroC.text;
+          final telefoneb = telefone.text;
+          final telefone_encb = telefone_enc.text;
+
+          /*EditDialog.onClickedDone(
+              nomeb, bairro, telefoneb, telefone_encb, context);*/
+          editEstudante(
+              transaction, nomeb, bairro, telefoneb, telefone_encb, classe);
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
+
+  void setDados(
+      String nomeD, String bairroD, String contactoD, String contacto_encD) {
+    nome.text = nomeD;
+    bairroC.text = bairroD;
+    telefone.text = contactoD;
+    telefone_enc.text = contacto_encD;
+  }
+
+  Widget _buildName() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Nome'),
+      maxLength: 20,
+      controller: nome,
+      validator: (value) {
+        if (value!.length < 2) {
+          return 'Digite Pelomenos 2 Caracteres';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => nome_f = value.toString()),
+    );
+  }
+
+  Widget _buildBairro() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Bairro'),
+      maxLength: 20,
+      controller: bairroC,
+      validator: (value) {
+        if (value!.length < 2) {
+          return 'Digite Pelomenos 2 Caracteres';
+        } else {
+          return null;
+        }
+      },
+      onSaved: (value) => setState(() => bairro = value.toString()),
+    );
+  }
+
+  Widget _buildTelefone() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Contacto'),
+      maxLength: 10,
+      controller: telefone,
+      validator: (value) {
+        if (value!.length < 9) {
+          return 'Digite Pelo menos 9 Digitos';
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+      onSaved: (value) => setState(() => contacto = value.toString()),
+    );
+  }
+
+  Widget _buildTelefone_Enc() {
+    return TextFormField(
+      decoration: InputDecoration(labelText: 'Contacto Do Encarregado'),
+      maxLength: 10,
+      controller: telefone_enc,
+      validator: (value) {
+        if (value!.length < 9) {
+          return 'Digite Pelo menos 9 Digitos';
+        } else {
+          return null;
+        }
+      },
+      keyboardType: TextInputType.number,
+      onSaved: (value) => setState(() => contacto_enc = value.toString()),
+    );
+  }
+
+  Widget buildSubmit() => Builder(
+        builder: (context) => ButtonWidget(
+          text: 'Cadastrar',
+          onClicked: () {
+            final isValid = _formKey.currentState!.validate();
+            // FocusScope.of(context).unfocus();
+
+            if (isValid) {
+              _formKey.currentState!.save();
+
+              final message = 'Cadastrado Com Sucesso';
+              final snackBar = SnackBar(
+                content: Text(
+                  message,
+                  style: TextStyle(fontSize: 20),
+                ),
+                backgroundColor: Colors.green,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+              Aluno al = new Aluno();
+              al.initData(0, nome_f, bairro, contacto, contacto_enc);
+              clean();
+              addEstudante(nome_f, bairro, contacto, contacto_enc, classe);
+            }
+          },
+        ),
+      );
+
+  void clean() {
+    nome.clear();
+    bairroC.clear();
+    telefone.clear();
+    telefone_enc.clear();
+  }
+
+  //metodos para o CRUD
 
   Future addEstudante(String nome, String bairro, String telefone,
       String telefone_enc, String classe) async {
@@ -223,11 +604,30 @@ class _TransactionPageState extends State<TransactionPage> {
     // mybox.keys;
   }
 
-  void deleteTransaction(Estudante transaction) {
+  void deleteEstudante(Estudante transaction) {
     // final box = Boxes.getTransactions();
     // box.delete(transaction.key);
 
     transaction.delete();
     //setState(() => transactions.remove(transaction));
+  }
+
+  void editEstudante(
+    Estudante transaction,
+    String nome,
+    String bairro,
+    String telefone,
+    String telefone_enc,
+    String classe,
+  ) {
+    transaction.nome = nome;
+    transaction.bairro = bairro;
+    transaction.telefone = telefone;
+    transaction.telefone_enc = telefone_enc;
+    transaction.classe = classe;
+    // final box = Boxes.getTransactions();
+    // box.put(transaction.key, transaction);
+
+    transaction.save();
   }
 }

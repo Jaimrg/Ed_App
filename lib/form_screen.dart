@@ -22,15 +22,6 @@ class FormScreen extends StatefulWidget {
 }
 
 class FormScreenState extends State<FormScreen> {
-  //Hive_Salvar Dados
-
-  @override
-  void dispose() {
-    Hive.close();
-
-    super.dispose();
-  }
-
   //Variaveis
   late String _classe;
   List _classes = [
@@ -54,10 +45,20 @@ class FormScreenState extends State<FormScreen> {
   String contacto = '';
   String contacto_enc = '';
   String classe = '';
+
+  //Hive_Salvar Dados
+
+  @override
+  void dispose() {
+    Hive.close();
+
+    super.dispose();
+  }
+
   //late String value;
 
   final topBar = new AppBar(
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.white,
     // centerTitle: true,
     elevation: 0.0,
     //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
@@ -65,9 +66,9 @@ class FormScreenState extends State<FormScreen> {
       Padding(
           padding: const EdgeInsets.only(right: 12.0, top: 19.0),
           child: new Text(
-            "CADASTRAR",
+            "Cadastro",
             style: TextStyle(
-                color: Colors.white,
+                color: Colors.blue,
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
                 fontFamily: 'arial'),

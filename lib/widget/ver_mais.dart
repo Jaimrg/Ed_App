@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 import '../model/Estudante.dart';
 
@@ -40,21 +40,41 @@ class _VerMaisDialogState extends State<VerMaisDialog> {
     final isEditing = widget.estudante != null;
     final title = 'Mais Dados Do Aluno';
 
-    return AlertDialog(
-        title: Text(title),
-        content: const Text('Classe: Jaime'
-                '\n' +
-            'Contacto: 874735265' +
-            '\n' +
-            'Contacto_Alt: 843736253'),
-        actions: <Widget>[
-          //buildCancelButton(context),
-          //buildOkButton(context),
-          TextButton(
-            child: Text('Fechar'),
-            onPressed: () => Navigator.of(context).pop(),
-          )
-        ]);
+    _showDialog(context);
+  }
+
+  _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Welcome'),
+            content: Text('Do you wanna learn flutter?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'YES',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'NO',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _showMyDialog() async {
@@ -102,4 +122,4 @@ class _VerMaisDialogState extends State<VerMaisDialog> {
       },
     );
   }
-}
+}*/
