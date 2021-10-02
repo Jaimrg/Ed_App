@@ -174,7 +174,7 @@ class _TransactionPageState extends State<TransactionPage> {
         title: Text(
           transaction.nome,
           maxLines: 2,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         subtitle: Text(
           transaction.bairro +
@@ -186,7 +186,7 @@ class _TransactionPageState extends State<TransactionPage> {
               transaction.telefone +
               "\n" +
               transaction.telefone_enc,
-          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
+          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
         ),
         trailing: Text(
           amount,
@@ -463,8 +463,8 @@ class _TransactionPageState extends State<TransactionPage> {
 
           /*EditDialog.onClickedDone(
               nomeb, bairro, telefoneb, telefone_encb, context);*/
-          editEstudante(
-              transaction, nomeb, bairro, telefoneb, telefone_encb, classe);
+          editEstudante(transaction, nomeb, bairro, telefoneb, telefone_encb,
+              _currentSugars!);
           Navigator.of(context).pop();
         }
       },
@@ -625,9 +625,37 @@ class _TransactionPageState extends State<TransactionPage> {
     transaction.telefone = telefone;
     transaction.telefone_enc = telefone_enc;
     transaction.classe = classe;
+    transaction.valor = valor(classe);
     // final box = Boxes.getTransactions();
     // box.put(transaction.key, transaction);
 
     transaction.save();
+  }
+
+  double valor(String classe) {
+    if (classe == '1ª a 7ª Classes') {
+      return 250;
+    }
+
+    //
+    if (classe == '8ª a 10ª Classes') {
+      return 250;
+    }
+    //
+    if (classe == '11ª e 12ª Classes') {
+      return 300;
+    }
+    if (classe == 'Preparação Para Exames') {
+      return 300;
+    }
+    //
+    if (classe == 'Ensino Médio') {
+      return 400;
+    }
+    //
+    if (classe == 'Ensino Superior') {
+      return 650;
+    }
+    return 200;
   }
 }

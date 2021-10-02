@@ -13,6 +13,7 @@ import 'package:ed_app/model/Estudante.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'data_show.dart';
+import 'package:intl/intl.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -23,6 +24,10 @@ class FormScreen extends StatefulWidget {
 
 class FormScreenState extends State<FormScreen> {
   //Variaveis
+
+  var now = new DateTime.now();
+  var formatter = new DateFormat('dd-MM-yyyy');
+
   late String _classe;
   List _classes = [
     '1ª a 7ª Classes',
@@ -165,7 +170,8 @@ class FormScreenState extends State<FormScreen> {
               Aluno al = new Aluno();
               al.initData(0, nome_f, bairro, contacto, contacto_enc);
               clean();
-              addEstudante(nome_f, bairro, contacto, contacto_enc, classe);
+              addEstudante(
+                  nome_f, bairro, contacto, contacto_enc, _currentSugars!);
             }
           },
         ),
@@ -354,6 +360,7 @@ class FormScreenState extends State<FormScreen> {
 
   Future addEstudante(String nome, String bairro, String telefone,
       String telefone_enc, String classe) async {
+    String formattedDate = formatter.format(now);
     final estudante = Estudante()
       ..nome = nome
       ..estado = true
@@ -361,8 +368,8 @@ class FormScreenState extends State<FormScreen> {
       ..bairro = bairro
       ..telefone = telefone
       ..telefone_enc = telefone_enc
-      ..data_pagamento = '10/09'
-      ..valor = 5000;
+      ..data_pagamento = formattedDate
+      ..valor = valor(classe);
     final box = Boxes.getTransactions();
     box.add(estudante);
     //box.put('mykey', transaction);
@@ -371,5 +378,32 @@ class FormScreenState extends State<FormScreen> {
     // final myTransaction = mybox.get('key');
     // mybox.values;
     // mybox.keys;
+  }
+
+  double valor(String classe) {
+    if (classe == '1ª a 7ª Classes') {
+      return 250;
+    }
+
+    //
+    if (classe == '8ª a 10ª Classes') {
+      return 250;
+    }
+    //
+    if (classe == '11ª e 12ª Classes') {
+      return 300;
+    }
+    if (classe == 'Preparação Para Exames') {
+      return 300;
+    }
+    //
+    if (classe == 'Ensino Médio') {
+      return 400;
+    }
+    //
+    if (classe == 'Ensino Superior') {
+      return 650;
+    }
+    return 200;
   }
 }
