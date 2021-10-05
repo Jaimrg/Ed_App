@@ -174,19 +174,11 @@ class _TransactionPageState extends State<TransactionPage> {
         title: Text(
           transaction.nome,
           maxLines: 2,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Text(
-          transaction.bairro +
-              "\n" +
-              transaction.data_pagamento +
-              "\n" +
-              transaction.classe +
-              "\n" +
-              transaction.telefone +
-              "\n" +
-              transaction.telefone_enc,
-          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 17),
+          transaction.bairro + "\n" + transaction.data_pagamento,
+          style: TextStyle(fontWeight: FontWeight.normal, fontSize: 14),
         ),
         trailing: Text(
           amount,
@@ -204,10 +196,10 @@ class _TransactionPageState extends State<TransactionPage> {
         children: [
           Expanded(
             child: TextButton.icon(
-              label: Text('Renovar'),
+              label: Text('Mais'),
               icon: Icon(Icons.more_vert),
               onPressed: () {
-                _RenovarDialog(context, transaction);
+                _MaisDialog(context, transaction);
               },
             ),
           ),
@@ -277,6 +269,47 @@ class _TransactionPageState extends State<TransactionPage> {
                 },
                 child: Text(
                   'Sim',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  _MaisDialog(BuildContext context, Estudante transaction) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Outros Dados'),
+            content: Text('Nivel: ' +
+                transaction.classe +
+                '\n\n' +
+                'Contacto: ' +
+                transaction.telefone +
+                '\n\n' +
+                'Contacto Alt: ' +
+                transaction.telefone_enc),
+            actions: [
+              /*TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Nao',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),*/
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Ok',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
