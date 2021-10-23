@@ -14,6 +14,7 @@ import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'data_show.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class FormScreen extends StatefulWidget {
   @override
@@ -25,6 +26,8 @@ class FormScreen extends StatefulWidget {
 class FormScreenState extends State<FormScreen> {
   //Variaveis
 
+  String date = "";
+  DateTime selectedDate = DateTime.now();
   var now = new DateTime.now();
   var formatter = new DateFormat('dd-MM-yyyy');
 
@@ -150,32 +153,68 @@ class FormScreenState extends State<FormScreen> {
   Widget buildSubmit() => Builder(
         builder: (context) => ButtonWidget(
           text: 'Cadastrar',
-          onClicked: () {
+          onClicked: () async {
             final isValid = _formKey.currentState!.validate();
             // FocusScope.of(context).unfocus();
-
-            if (isValid) {
-              _formKey.currentState!.save();
-
-              final message = 'Cadastrado Com Sucesso';
-              final snackBar = SnackBar(
-                content: Text(
-                  message,
-                  style: TextStyle(fontSize: 20),
-                ),
-                backgroundColor: Colors.green,
-              );
-              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-              Aluno al = new Aluno();
-              al.initData(0, nome_f, bairro, contacto, contacto_enc);
-              clean();
-              addEstudante(
-                  nome_f, bairro, contacto, contacto_enc, _currentSugars!);
-            }
+            _selectDate(context, isValid);
+            // _DataDialog(context, isValid);
           },
         ),
       );
+
+  _DataDialog(BuildContext context, bool isValid) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Expanded(
+          child: AlertDialog(
+            title: Text('Confirmar Data'),
+            content: Text('Confirmar a Renovacao do Pacote da '),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Nao',
+                  style: TextStyle(color: Colors.red),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  if (isValid) {
+                    _formKey.currentState!.save();
+
+                    final message = 'Cadastrado Com Sucesso';
+                    final snackBar = SnackBar(
+                      content: Text(
+                        message,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      backgroundColor: Colors.green,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+
+                  Aluno al = new Aluno();
+                  al.initData(0, nome_f, bairro, contacto, contacto_enc);
+                  clean();
+
+                  addEstudante(
+                      nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Sim',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   void clean() {
     nome.clear();
@@ -237,7 +276,6 @@ class FormScreenState extends State<FormScreen> {
                             });
                           },
                         ))*/
-
                           DropdownButtonFormField<String>(
                             value: _currentSugars,
                             // decoration: const textInputDecoration,
@@ -250,6 +288,35 @@ class FormScreenState extends State<FormScreen> {
                             onChanged: (val) =>
                                 setState(() => _currentSugars = val),
                           ),
+                          /* Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              IconButton(
+                                icon: Icon(Icons.date_range),
+                                onPressed: () async {
+                                  final data = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now()
+                                        .subtract(Duration(days: 365)),
+                                    lastDate:
+                                        DateTime.now().add(Duration(days: 365)),
+                                    locale: Localizations.localeOf(context),
+                                  );
+
+                                  String d = data.toString();
+                                  print(d);
+                                  if (data != null) {
+                                    final datapt = DateFormat(
+                                            DateFormat.YEAR_MONTH_DAY, 'pt_Br')
+                                        .format(data);
+
+                                    print(datapt);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),*/
                           SizedBox(height: 30),
                           Container(
                             color: Colors.transparent,
@@ -360,7 +427,7 @@ class FormScreenState extends State<FormScreen> {
 
   Future addEstudante(String nome, String bairro, String telefone,
       String telefone_enc, String classe) async {
-    String formattedDate = formatter.format(now);
+    String formattedDate = formatter.format(selectedDate);
     final estudante = Estudante()
       ..nome = nome
       ..estado = true
@@ -378,6 +445,40 @@ class FormScreenState extends State<FormScreen> {
     // final myTransaction = mybox.get('key');
     // mybox.values;
     // mybox.keys;
+  }
+
+  _selectDate(BuildContext context, bool isValid) async {
+    final DateTime? selected = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2010),
+        lastDate: DateTime(2025),
+        helpText: "SELECIONAR DATA E CONFIRMAR");
+    if (selected != null && selected != selectedDate)
+      setState(() {
+        selectedDate = selected;
+
+        if (isValid) {
+          _formKey.currentState!.save();
+
+          final message = 'Cadastrado Com Sucesso';
+          final snackBar = SnackBar(
+            content: Text(
+              message,
+              style: TextStyle(fontSize: 20),
+            ),
+            backgroundColor: Colors.green,
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+
+        Aluno al = new Aluno();
+        al.initData(0, nome_f, bairro, contacto, contacto_enc);
+        clean();
+
+        addEstudante(nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+      });
+    print(selectedDate);
   }
 
   double valor(String classe) {
