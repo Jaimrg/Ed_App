@@ -200,9 +200,14 @@ class FormScreenState extends State<FormScreen> {
                   al.initData(0, nome_f, bairro, contacto, contacto_enc);
                   clean();
 
-                  addEstudante(
-                      nome_f, bairro, contacto, contacto_enc, _currentSugars!);
-                  Navigator.of(context).pop();
+                  //addEstudante(
+                  //  nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+                  Navigator.of(context, rootNavigator: true).pop();
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => new FormScreen()),
+                  );
                 },
                 child: Text(
                   'Sim',
@@ -477,6 +482,10 @@ class FormScreenState extends State<FormScreen> {
         clean();
 
         addEstudante(nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => new FormScreen()),
+        );
       });
     print(selectedDate);
   }
