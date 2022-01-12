@@ -28,7 +28,7 @@ class HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      "Johny s Family",
+                      "Jaime",
                       style: GoogleFonts.openSans(
                           textStyle: TextStyle(
                               color: Colors.white,

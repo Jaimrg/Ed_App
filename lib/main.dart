@@ -8,6 +8,8 @@ import 'data_show.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'HomeScreen.dart';
+
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -33,7 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FormScreen(),
+      home: HomeScreen(),
     );
   }
 }
