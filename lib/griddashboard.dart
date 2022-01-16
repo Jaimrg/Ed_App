@@ -41,9 +41,9 @@ class GridDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Items> myList = [item1, item2, item3, item4, item5, item6];
-    var color = 0xff453658;
-    return Flexible(
+    List<Items> myList = [item1, item2, item3, item4];
+    var color = 0xFFFFFF; //0xff453658;
+    return Expanded(
       child: GridView.count(
           childAspectRatio: 1.0,
           padding: EdgeInsets.only(left: 16, right: 16),
@@ -52,51 +52,73 @@ class GridDashboard extends StatelessWidget {
           mainAxisSpacing: 18,
           children: myList.map((data) {
             return Container(
-              decoration: BoxDecoration(
-                  color: Color(color), borderRadius: BorderRadius.circular(10)),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    data.img,
-                    width: 42,
-                  ),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Text(
-                    data.title,
-                    style: GoogleFonts.openSans(
-                        textStyle: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    data.subtitle,
-                    style: GoogleFonts.openSans(
-                        textStyle: TextStyle(
-                            color: Colors.white38,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Text(
-                    data.event,
-                    style: GoogleFonts.openSans(
-                        textStyle: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                ],
-              ),
-            );
+                decoration: BoxDecoration(
+                  color: Color(color),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 1),
+                        blurRadius: 2.0)
+                  ],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                child: Material(
+                    borderRadius: BorderRadius.circular(12.0),
+                    color: Colors.white,
+                    child: InkWell(
+                        borderRadius: BorderRadius.circular(12.0),
+                        onTap: () {},
+                        splashColor: Colors.red,
+                        splashFactory: InkSplash.splashFactory,
+                        child: Container(
+                          padding: EdgeInsets.all(12.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Image.asset(
+                                data.img,
+                                width: 42,
+                              ),
+                              SizedBox(
+                                height: 14,
+                              ),
+                              Text(
+                                data.title,
+                                style: GoogleFonts.openSans(
+                                    textStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                data.subtitle,
+                                style: GoogleFonts.openSans(
+                                    textStyle: TextStyle(
+                                        color: Colors.white38,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                              SizedBox(
+                                height: 14,
+                              ),
+                              Text(
+                                data.event,
+                                style: GoogleFonts.openSans(
+                                    textStyle: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                            ],
+                          ),
+                        ))));
           }).toList()),
     );
   }
