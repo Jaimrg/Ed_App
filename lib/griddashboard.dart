@@ -3,40 +3,28 @@ import 'package:google_fonts/google_fonts.dart';
 
 class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
-      title: "Calendar",
-      subtitle: "March, Wednesday",
-      event: "3 Events",
-      img: "assets/calendar.png");
+      title: "Cadastrar",
+      //subtitle: "March, Wednesday",
+      //event: "3 Events",
+      img: "assets/add.png");
 
   Items item2 = new Items(
-    title: "Groceries",
-    subtitle: "Bocali, Apple",
-    event: "4 Items",
-    img: "assets/food.png",
+    title: "Listagem",
+    // subtitle: "Bocali, Apple",
+    //event: "4 Items",
+    img: "assets/examination.png",
   );
   Items item3 = new Items(
-    title: "Locations",
-    subtitle: "Lucy Mao going to Office",
-    event: "",
-    img: "assets/map.png",
+    title: "Ajustes",
+    //subtitle: "Lucy Mao going to Office",
+    //event: "",
+    img: "assets/settings.png",
   );
   Items item4 = new Items(
-    title: "Activity",
-    subtitle: "Rose favirited your Post",
-    event: "",
-    img: "assets/festival.png",
-  );
-  Items item5 = new Items(
-    title: "To do",
-    subtitle: "Homework, Design",
-    event: "4 Items",
-    img: "assets/todo.png",
-  );
-  Items item6 = new Items(
-    title: "Settings",
-    subtitle: "",
-    event: "2 Items",
-    img: "assets/setting.png",
+    title: "Agendamentos",
+    // subtitle: "Rose favirited your Post",
+    //event: "",
+    img: "assets/calendar_2.png",
   );
 
   @override
@@ -90,32 +78,32 @@ class GridDashboard extends StatelessWidget {
                                 data.title,
                                 style: GoogleFonts.openSans(
                                     textStyle: TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.blue,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600)),
                               ),
                               SizedBox(
                                 height: 8,
                               ),
-                              Text(
+                              /*Text(
                                 data.subtitle,
                                 style: GoogleFonts.openSans(
                                     textStyle: TextStyle(
                                         color: Colors.white38,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w600)),
-                              ),
+                              ),*/
                               SizedBox(
                                 height: 14,
                               ),
-                              Text(
+                              /*Text(
                                 data.event,
                                 style: GoogleFonts.openSans(
                                     textStyle: TextStyle(
                                         color: Colors.white70,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600)),
-                              ),
+                              ),*/
                             ],
                           ),
                         ))));
@@ -126,12 +114,12 @@ class GridDashboard extends StatelessWidget {
 
 class Items {
   String title;
-  String subtitle;
-  String event;
+  //String subtitle;
+  //String event;
   String img;
   Items(
       {required this.title,
-      required this.subtitle,
-      required this.event,
+      // required this.subtitle,
+      // required this.event,
       required this.img});
 }

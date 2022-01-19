@@ -64,6 +64,10 @@ flutter:
       - assets/map.png
       - assets/setting.png
       - assets/todo.png
+      - assets/add.png
+      - assets/settings.png
+      - assets/examination.png
+      - assets/calendar_2.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

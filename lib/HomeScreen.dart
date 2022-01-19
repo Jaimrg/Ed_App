@@ -26,12 +26,11 @@ class HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(90),
                     bottomRight: Radius.circular(90)))),
-        body: Center(
-            child: Container(
-                margin: EdgeInsets.all(25),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [GridDashboard()],
-                ))));
+        body: Column(
+          children: <Widget>[
+            SizedBox(height: 39),
+            Expanded(child: GridDashboard()),
+          ],
+        ));
   }
 }
