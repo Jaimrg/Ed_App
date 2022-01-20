@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'form_screen.dart';
+import 'data_show.dart';
+import 'package:hive/hive.dart';
+import 'package:ed_app/model/Estudante.dart';
+
+import 'package:hive_flutter/hive_flutter.dart';
 
 class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
@@ -59,7 +65,22 @@ class GridDashboard extends StatelessWidget {
                     color: Colors.white,
                     child: InkWell(
                         borderRadius: BorderRadius.circular(12.0),
-                        onTap: () {},
+                        onTap: () {
+                          if (data.title == "Cadastrar") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => new FormScreen()));
+                          }
+
+                          if (data.title == "Listagem") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        new TransactionPage()));
+                          }
+                        },
                         splashColor: Colors.red,
                         splashFactory: InkSplash.splashFactory,
                         child: Container(

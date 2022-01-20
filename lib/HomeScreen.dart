@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'griddashboard.dart';
 import 'grid_page.dart';
+import 'package:hive/hive.dart';
+import 'package:ed_app/model/Estudante.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

@@ -69,6 +69,9 @@ class FormScreenState extends State<FormScreen> {
     backgroundColor: Colors.white,
     // centerTitle: true,
     elevation: 0.0,
+    iconTheme: IconThemeData(
+      color: Colors.blue, //change your color here
+    ),
     //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
     actions: <Widget>[
       Padding(
