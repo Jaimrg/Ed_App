@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "616356000196",
+    "project_id": "ed-app-2",
+    "storage_bucket": "ed-app-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616356000196:android:16b578534cb710a5697491",
+        "android_client_info": {
+          "package_name": "com.jaime.edapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "616356000196-9lrqu93n82mifccd6adu511ni1qgia6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jaime.edapp",
+            "certificate_hash": "da9f4f802f25e0c78c13f3672efc5098e897c381"
+          }
+        },
+        {
+          "client_id": "616356000196-ne76q1ljiqsvseji476glreeglge5hvu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqhMgT9_yTSHN1LBQ_koDO0J9cohwmmBY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "616356000196-ne76q1ljiqsvseji476glreeglge5hvu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

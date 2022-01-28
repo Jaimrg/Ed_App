@@ -6,8 +6,9 @@ buildscript {
     }
 
     dependencies {
+        classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.android.tools.build:gradle:4.1.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"        
     }
 }
 
@@ -27,3 +28,6 @@ subprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+//org.gradle.java.home=C:\\Program Files\\Java\\jdk1.8.0_321
+//compileJava.options.fork = true
+//compileJava.options.forkOptions.executable = 'C:/Program Files/Java/jdk1.8.0_321'

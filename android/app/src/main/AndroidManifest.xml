@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ed_app">
+    package="com.jaime.edapp">
    <application
-        android:label="ed_app"
+        android:label="ED"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
