@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'data_table.dart';
 import 'model/Info_Aluno.dart';
@@ -17,6 +18,9 @@ import 'package:ed_app/widget/transaction_dialog.dart';
 import 'package:ed_app/widget/ver_mais.dart';
 import 'widget/EditDialog.dart';
 import 'package:intl/intl.dart';
+
+import 'package:ed_app/util/database.dart';
+import 'package:ed_app/show_data.dart';
 
 class TransactionPage extends StatefulWidget {
   @override
@@ -86,19 +90,28 @@ class _TransactionPageState extends State<TransactionPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: topBar,
-        /*AppBar(
+      appBar: topBar,
+      /*AppBar(
           title: Text('Lista De Alunos'),
           centerTitle: true,
         ),*/
-        body: ValueListenableBuilder<Box<Estudante>>(
-          valueListenable: Boxes.getTransactions().listenable(),
+      body: //ValueListenableBuilder<Box<Estudante>>(
+          SafeArea(
+        /*valueListenable: Boxes.getTransactions().listenable(),
           builder: (context, box, _) {
             final box = Boxes.getTransactions();
             final transactions = box.values.toList().cast<Estudante>();
 
             return buildContent(transactions);
-          },
+
+          },*/
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16.0,
+            right: 16.0,
+            bottom: 20.0,
+          ),
+          //child: ItemList(),
         ),
         /*floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -109,7 +122,7 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
           ),
         ),*/
-      );
+      ));
 
   Widget buildContent(List<Estudante> transactions) {
     if (transactions.isEmpty) {
@@ -120,26 +133,9 @@ class _TransactionPageState extends State<TransactionPage> {
         ),
       );
     } else {
-      /* final netExpense = transactions.fold<double>(
-        0,
-        (previousValue, transaction) => transaction.isExpense
-            ? previousValue - transaction.amount
-            : previousValue + transaction.amount,
-      );
-      final newExpenseString = '\$${netExpense.toStringAsFixed(2)}';
-      final color = netExpense > 0 ? Colors.green : Colors.red;*/
-
       return Column(
         children: [
           SizedBox(height: 24),
-          /* Text(
-            'Net Expense: $newExpenseString',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: color,
-            ),
-          ),*/
           SizedBox(height: 24),
           Expanded(
             child: ListView.builder(

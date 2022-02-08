@@ -5,6 +5,7 @@ import 'grid_page.dart';
 import 'package:hive/hive.dart';
 import 'package:ed_app/model/Estudante.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,8 +15,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  final FocusNode _uidFocusNode = FocusNode();
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+
+    return firebaseApp;
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("object");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'data_table.dart';
 import 'model/Info_Aluno.dart';
 import 'model/Aluno.dart';
@@ -16,7 +17,21 @@ import 'data_show.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+//
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:ed_app/util/database.dart';
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final CollectionReference _mainCollection = _firestore.collection('alunos');
+
 class FormScreen extends StatefulWidget {
+  final FocusNode focusNode;
+
+  const FormScreen({
+    Key? key,
+    required this.focusNode,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return FormScreenState();
@@ -24,6 +39,16 @@ class FormScreen extends StatefulWidget {
 }
 
 class FormScreenState extends State<FormScreen> {
+  final TextEditingController _uidController = TextEditingController();
+  final firestoreInstance = FirebaseFirestore.instance;
+
+  final _loginInFormKey = GlobalKey<FormState>();
+  addAluno() {
+    Map<String, dynamic> dados = {"nome": "Joao", "estado": "pago"};
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection('alunos');
+    collectionReference.add(dados);
+  }
   //Variaveis
 
   String date = "";
@@ -153,17 +178,51 @@ class FormScreenState extends State<FormScreen> {
     );
   }
 
+  static Future<void> addItem({
+    required String nome,
+    required String apelido,
+  }) async {
+    DocumentReference documentReferencer = _mainCollection
+        .doc('OJXUjPUhtGeeNADTKR3l')
+        .collection('estudantes')
+        .doc();
+
+    Map<String, dynamic> data = <String, dynamic>{
+      "apelido": apelido,
+      "nome": nome
+    };
+
+    await documentReferencer
+        .set(data)
+        .whenComplete(() => print('Estudante Adicionado Com Sucesso'))
+        .catchError((e) => print(e));
+  }
+
   Widget buildSubmit() => Builder(
         builder: (context) => ButtonWidget(
           text: 'Cadastrar',
           onClicked: () async {
-            final isValid = _formKey.currentState!.validate();
+            //final isValid = _formKey.currentState!.validate();
             // FocusScope.of(context).unfocus();
-            _selectDate(context, isValid);
+            //_selectDate(context, isValid);
             // _DataDialog(context, isValid);
+            // debugPrint("ola");
+            //imp();
+            //await Database.addItem(nome: "Josefa", apelido: "Maboi");
+            firestoreInstance.collection("users").add({
+              "name": "john",
+              "age": 50,
+              "email": "example@example.com",
+              "address": {"street": "street 24", "city": "new york"}
+            }).then((value) {
+              print(value.id);
+            });
           },
         ),
       );
+  static void imp() {
+    print('cheguei');
+  }
 
   _DataDialog(BuildContext context, bool isValid) {
     showDialog(
@@ -184,7 +243,7 @@ class FormScreenState extends State<FormScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   if (isValid) {
                     _formKey.currentState!.save();
 
@@ -207,10 +266,10 @@ class FormScreenState extends State<FormScreen> {
                   //  nome_f, bairro, contacto, contacto_enc, _currentSugars!);
                   Navigator.of(context, rootNavigator: true).pop();
 
-                  Navigator.push(
+                  /* Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => new FormScreen()),
-                  );
+                  );*/
                 },
                 child: Text(
                   'Sim',
@@ -391,10 +450,10 @@ class FormScreenState extends State<FormScreen> {
                   icon: Icon(Icons.group_add_rounded),
                   label: Text('Adicionar Aluno'),
                   onPressed: () {
-                    Navigator.push(
+                    /* Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => new FormScreen()),
-                    );
+                    );*/
                   },
                 ),
                 /* new IconButton(
@@ -453,6 +512,7 @@ class FormScreenState extends State<FormScreen> {
     // final myTransaction = mybox.get('key');
     // mybox.values;
     // mybox.keys;
+    print("salvo");
   }
 
   _selectDate(BuildContext context, bool isValid) async {
@@ -463,7 +523,7 @@ class FormScreenState extends State<FormScreen> {
         lastDate: DateTime(2025),
         helpText: "SELECIONAR DATA E CONFIRMAR");
     if (selected != null && selected != selectedDate)
-      setState(() {
+      setState(() async {
         selectedDate = selected;
 
         if (isValid) {
@@ -480,15 +540,19 @@ class FormScreenState extends State<FormScreen> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
 
-        Aluno al = new Aluno();
-        al.initData(0, nome_f, bairro, contacto, contacto_enc);
+        Database.addAluno(
+            nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+
+        //Aluno al = new Aluno();
+        //al.initData(0, nome_f, bairro, contacto, contacto_enc);
         clean();
 
-        addEstudante(nome_f, bairro, contacto, contacto_enc, _currentSugars!);
-        Navigator.push(
+        // addEstudante(nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+
+        /* Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => new FormScreen()),
-        );
+        );*/
       });
     print(selectedDate);
   }
@@ -520,3 +584,7 @@ class FormScreenState extends State<FormScreen> {
     return 200;
   }
 }
+
+//Metodos CRUD firebase
+
+

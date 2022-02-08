@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'form_screen.dart';
@@ -6,6 +8,10 @@ import 'package:hive/hive.dart';
 import 'package:ed_app/model/Estudante.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:ed_app/util/database.dart';
 
 class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
@@ -32,6 +38,14 @@ class GridDashboard extends StatelessWidget {
     //event: "",
     img: "assets/calendar_2.png",
   );
+
+  final FocusNode _uidFocusNode = FocusNode();
+
+  Future<FirebaseApp> _initializeFirebase() async {
+    FirebaseApp firebaseApp = await Firebase.initializeApp();
+
+    return firebaseApp;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,12 +79,26 @@ class GridDashboard extends StatelessWidget {
                     color: Colors.white,
                     child: InkWell(
                         borderRadius: BorderRadius.circular(12.0),
-                        onTap: () {
+                        onTap: () async {
                           if (data.title == "Cadastrar") {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => new FormScreen()));
+                            FutureBuilder(
+                              future: _initializeFirebase(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) {
+                                  return Text('Error initializing Firebase');
+                                } else if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return FormScreen(focusNode: _uidFocusNode);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => new FormScreen(
+                                              focusNode: _uidFocusNode)));
+                                }
+                                return CircularProgressIndicator();
+                              },
+                            );
+                            print("ola");
                           }
 
                           if (data.title == "Listagem") {
@@ -79,6 +107,14 @@ class GridDashboard extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         new TransactionPage()));
+                          }
+
+                          if (data.title == "Ajustes") {
+                            Database.addAluno("nome", "bairro", "telefone",
+                                "telefone_enc", "classe");
+                            /*await Database.addEstudante(
+                                nome: "Luis", estado: "Pago");
+                            print('ajustes');*/
                           }
                         },
                         splashColor: Colors.red,
