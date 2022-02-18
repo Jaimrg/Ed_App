@@ -8,13 +8,14 @@ final CollectionReference _mainCollection = _firestore.collection('alunos');
 class Database {
   static String? userUid;
   static addAluno(String nome, String bairro, String telefone,
-      String telefone_enc, String classe) {
+      String telefone_enc, String classe, String data_pagamento) {
     Map<String, dynamic> dados = {
       "nome": nome,
       "bairro": bairro,
       "telefone": telefone,
       "telefone_enc": telefone_enc,
-      "classe": classe
+      "classe": classe,
+      "data_pagamento": data_pagamento
     };
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection('explicandos');
@@ -48,5 +49,17 @@ class Database {
 
   static getUsers() {
     return FirebaseFirestore.instance.collection('alunos').snapshots();
+  }
+
+  static Future<void> deleteItem({
+    required String docId,
+  }) async {
+    DocumentReference documentReferencer =
+        _mainCollection.doc(userUid).collection('explicandos').doc(docId);
+
+    await documentReferencer
+        .delete()
+        .whenComplete(() => print('Student deleted from the database'))
+        .catchError((e) => print(e));
   }
 }

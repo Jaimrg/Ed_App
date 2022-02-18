@@ -12,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ed_app/util/database.dart';
+import 'package:ed_app/show_data.dart';
 
 class GridDashboard extends StatelessWidget {
   Items item1 = new Items(
@@ -81,23 +82,13 @@ class GridDashboard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12.0),
                         onTap: () async {
                           if (data.title == "Cadastrar") {
-                            FutureBuilder(
-                              future: _initializeFirebase(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError) {
-                                  return Text('Error initializing Firebase');
-                                } else if (snapshot.connectionState ==
-                                    ConnectionState.done) {
-                                  return FormScreen(focusNode: _uidFocusNode);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => new FormScreen(
-                                              focusNode: _uidFocusNode)));
-                                }
-                                return CircularProgressIndicator();
-                              },
-                            );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => new FormScreen(
+                                        focusNode: _uidFocusNode)));
+
+                            ;
                             print("ola");
                           }
 
@@ -105,13 +96,10 @@ class GridDashboard extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        new TransactionPage()));
+                                    builder: (context) => new StudentList()));
                           }
 
                           if (data.title == "Ajustes") {
-                            Database.addAluno("nome", "bairro", "telefone",
-                                "telefone_enc", "classe");
                             /*await Database.addEstudante(
                                 nome: "Luis", estado: "Pago");
                             print('ajustes');*/

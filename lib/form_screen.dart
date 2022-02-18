@@ -202,21 +202,13 @@ class FormScreenState extends State<FormScreen> {
         builder: (context) => ButtonWidget(
           text: 'Cadastrar',
           onClicked: () async {
-            //final isValid = _formKey.currentState!.validate();
-            // FocusScope.of(context).unfocus();
-            //_selectDate(context, isValid);
+            final isValid = _formKey.currentState!.validate();
+            FocusScope.of(context).unfocus();
+            _selectDate(context, isValid);
             // _DataDialog(context, isValid);
             // debugPrint("ola");
             //imp();
             //await Database.addItem(nome: "Josefa", apelido: "Maboi");
-            firestoreInstance.collection("users").add({
-              "name": "john",
-              "age": 50,
-              "email": "example@example.com",
-              "address": {"street": "street 24", "city": "new york"}
-            }).then((value) {
-              print(value.id);
-            });
           },
         ),
       );
@@ -540,8 +532,8 @@ class FormScreenState extends State<FormScreen> {
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
 
-        Database.addAluno(
-            nome_f, bairro, contacto, contacto_enc, _currentSugars!);
+        Database.addAluno(nome_f, bairro, contacto, contacto_enc,
+            _currentSugars!, selectedDate.toString());
 
         //Aluno al = new Aluno();
         //al.initData(0, nome_f, bairro, contacto, contacto_enc);

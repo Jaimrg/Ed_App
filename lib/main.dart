@@ -24,6 +24,8 @@ Future main() async {
 
   Hive.registerAdapter(EstudanteAdapter());
   await Hive.openBox<Estudante>('Estudante');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
