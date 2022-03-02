@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 
 class StudentList extends StatelessWidget {
   final db = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,67 +15,76 @@ class StudentList extends StatelessWidget {
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: db.collection('explicandos').snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Column(children: [
-              SizedBox(height: 24),
-              SizedBox(height: 24),
-              Expanded(
-                child: ListView(
+          stream: db.collection('explicandos').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return ListView.separated(
+                  separatorBuilder: (context, index) => SizedBox(height: 16.0),
+                  itemCount: snapshot.data!.docs.length,
                   padding: EdgeInsets.all(8),
-                  children: (snapshot.data!).docs.map((doc) {
-                    String? docID =
-                        snapshot.data?.docs[0].reference.id.toString();
-                    return Card(
-                        color: Colors.white,
-                        child: ExpansionTile(
-                          tilePadding:
-                              EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-                          title: Text(
-                            (doc.data().toString().contains('nome')
-                                ? doc.get('nome')
-                                : ''),
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          subtitle: Text(
-                            (doc.data().toString().contains('bairro')
-                                    ? doc.get('bairro')
-                                    : '') +
-                                "\n" +
-                                (doc.data().toString().contains('bairro')
-                                    ? doc.get('bairro')
-                                    : ''),
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 14),
-                          ),
-                          trailing: Text(
-                            "250,00 Mt",
-                            style: TextStyle(
-                                color: Colors.green,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16),
-                          ),
-                          children: [
-                            buildButtons(context, docID!),
-                          ],
-                        ));
-                  }).toList(),
-                ),
-              )
-            ]);
-          }
-        },
-      ),
+                  itemBuilder: (context, index) {
+                    // return ListTile(
+
+                    (snapshot.data!).docs.map((doc) {
+                      String? docID = snapshot.data?.docs[index].id.toString();
+                      snapshot.data?.docs[index].reference.id.toString();
+                      return Card(
+                          color: Colors.white,
+                          child: ExpansionTile(
+                            tilePadding: EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 8),
+                            title: Text(
+                              (doc.data().toString().contains('nome')
+                                  ? doc.get('nome')
+                                  : ''),
+                              maxLines: 2,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            subtitle: Text(
+                              (doc.data().toString().contains('bairro')
+                                      ? doc.get('bairro')
+                                      : '') +
+                                  "\n" +
+                                  docID,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal, fontSize: 14),
+                            ),
+                            trailing: Text(
+                              "250,00 Mt",
+                              style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ),
+                            children: [
+                              buildButtons(context, docID!),
+                            ],
+                          ));
+                    }).toList();
+
+                    try {
+                      var matchList = fetchMatches();
+                      return matchList;
+                    } catch (Exc) {
+                      print(Exc);
+                      rethrow;
+                    }
+                  });
+            }
+            ;
+          }),
     );
   }
+
+  fetchMatches() {}
 }
+
+class MatchModel {}
 
 Widget buildButtons(BuildContext context, String docId) => Row(
       children: [
@@ -97,6 +107,8 @@ Widget buildButtons(BuildContext context, String docId) => Row(
             label: Text('Excluir'),
             icon: Icon(Icons.delete),
             onPressed: () {
+              debugPrint("Cheguei!");
+              print("Doc ID:" + docId);
               Database.deleteItem(docId: docId);
             },
           ),

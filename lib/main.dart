@@ -7,9 +7,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'data_show.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
+import 'screens/home_page.dart';
 import 'HomeScreen.dart';
-
+import 'package:ed_app/screens/home_page.dart';
+import 'package:ed_app/theme/colors/light_colors.dart';
+import 'package:flutter/services.dart';
+import 'package:ed_app/screens/calendar_page.dart';
 //Firebase
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +21,10 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('alunos');
 
 Future main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      //cd  systemNavigationBarColor: LightColors.kLightYellow, // navigation bar color
+      //statusBarColor: Color(0xffffb969), // status bar color
+      ));
   WidgetsFlutterBinding.ensureInitialized();
 
   await Hive.initFlutter();

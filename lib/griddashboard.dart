@@ -8,7 +8,7 @@ import 'package:hive/hive.dart';
 import 'package:ed_app/model/Estudante.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
-
+import 'package:ed_app/screens/calendar_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:ed_app/util/database.dart';
@@ -103,6 +103,13 @@ class GridDashboard extends StatelessWidget {
                             /*await Database.addEstudante(
                                 nome: "Luis", estado: "Pago");
                             print('ajustes');*/
+                          }
+
+                          if (data.title == "Agendamentos") {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => new CalendarPage()));
                           }
                         },
                         splashColor: Colors.red,
