@@ -51,15 +51,19 @@ class Database {
     return FirebaseFirestore.instance.collection('alunos').snapshots();
   }
 
-  static Future<void> deleteItem({
-    required String docId,
-  }) async {
-    DocumentReference documentReferencer =
+  static Future<void> deleteItem(
+      {required String docId,
+      required DocumentReference<Object?>? reference}) async {
+    /*DocumentReference documentReferencer =
         _mainCollection.doc(userUid).collection('explicandos').doc(docId);
 
     await documentReferencer
         .delete()
         .whenComplete(() => print('Student deleted from the database'))
-        .catchError((e) => print(e));
+        .catchError((e) => print(e));*/
+
+    await _firestore.runTransaction((Transaction myTransaction) async {
+      await myTransaction.delete(reference!);
+    });
   }
 }

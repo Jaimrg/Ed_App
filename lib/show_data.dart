@@ -11,8 +11,26 @@ class StudentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Alunos"),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        // centerTitle: true,
+        elevation: 0.0,
+        iconTheme: IconThemeData(
+          color: Colors.blue, //change your color here
+        ),
+        //leading: new Icon(Icons.arrow_back_ios, color: Colors.black),
+        actions: <Widget>[
+          Padding(
+              padding: const EdgeInsets.only(right: 12.0, top: 19.0),
+              child: new Text(
+                "Lista de Alunos",
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                  fontFamily: 'arial',
+                ),
+              ))
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
           stream: db.collection('explicandos').snapshots(),
@@ -22,14 +40,55 @@ class StudentList extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             } else {
-              return ListView.separated(
-                  separatorBuilder: (context, index) => SizedBox(height: 16.0),
-                  itemCount: snapshot.data!.docs.length,
-                  padding: EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    // return ListTile(
-
-                    (snapshot.data!).docs.map((doc) {
+              return Column(
+                children: [
+                  SizedBox(height: 24),
+                  SizedBox(height: 24),
+                  Expanded(
+                    child: ListView.builder(
+                        padding: EdgeInsets.all(8),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String? docID =
+                              snapshot.data?.docs[index].id.toString();
+                          snapshot.data?.docs[index].reference.id.toString();
+                          return Card(
+                              color: Colors.white,
+                              child: ExpansionTile(
+                                tilePadding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 8),
+                                title: Text(
+                                  snapshot.data?.docs[index]['nome'],
+                                  maxLines: 2,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                                subtitle: Text(
+                                  snapshot.data?.docs[index]['bairro'] +
+                                      "\n" +
+                                      snapshot
+                                          .data?.docs[index]['data_pagamento']
+                                          .toString()
+                                          .substring(1, 10),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 14),
+                                ),
+                                trailing: Text(
+                                  "250,00 Mt",
+                                  style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                                children: [
+                                  buildButtons(context, docID.toString(),
+                                      snapshot.data?.docs[index].reference),
+                                ],
+                              ));
+                          //Dead Code but it can helpme one day then i'll let it here
+                          /*(snapshot.data!)docs.map((doc) {
                       String? docID = snapshot.data?.docs[index].id.toString();
                       snapshot.data?.docs[index].reference.id.toString();
                       return Card(
@@ -65,16 +124,19 @@ class StudentList extends StatelessWidget {
                               buildButtons(context, docID!),
                             ],
                           ));
-                    }).toList();
+                    }).toList();*/
 
-                    try {
-                      var matchList = fetchMatches();
-                      return matchList;
-                    } catch (Exc) {
-                      print(Exc);
-                      rethrow;
-                    }
-                  });
+                          try {
+                            var matchList = fetchMatches();
+                            return matchList;
+                          } catch (Exc) {
+                            print(Exc);
+                            rethrow;
+                          }
+                        }),
+                  )
+                ],
+              );
             }
             ;
           }),
@@ -86,7 +148,9 @@ class StudentList extends StatelessWidget {
 
 class MatchModel {}
 
-Widget buildButtons(BuildContext context, String docId) => Row(
+Widget buildButtons(BuildContext context, String docId,
+        DocumentReference<Object?>? reference) =>
+    Row(
       children: [
         Expanded(
           child: TextButton.icon(
@@ -108,8 +172,8 @@ Widget buildButtons(BuildContext context, String docId) => Row(
             icon: Icon(Icons.delete),
             onPressed: () {
               debugPrint("Cheguei!");
-              print("Doc ID:" + docId);
-              Database.deleteItem(docId: docId);
+              print("Doc ID: " + docId);
+              Database.deleteItem(docId: docId, reference: reference);
             },
           ),
         )
