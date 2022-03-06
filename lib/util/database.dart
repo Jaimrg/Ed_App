@@ -66,4 +66,21 @@ class Database {
       await myTransaction.delete(reference!);
     });
   }
+
+  static Future<void> updateEstudantea({
+    required String nome,
+    required String bairro,
+    required String classe,
+    required String telefone,
+    required String telefone_enc,
+    required String id,
+  }) async {
+    await _firestore.doc(id).update({
+      "nome": nome,
+      "bairro": bairro,
+      "classe": classe,
+      "telefone": telefone,
+      "telefone_enc": telefone_enc
+    });
+  }
 }
